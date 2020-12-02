@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('simple_intro');
             $table->string('profile_intro');
+            $table->string('github_link');
             $table->rememberToken();
             $table->timestamps();
         });
