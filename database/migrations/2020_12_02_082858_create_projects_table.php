@@ -13,10 +13,13 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
+        //TODO 각각 모델 생성후 간단한 CRUD 등록
+        //TODO 미들웨어 등록 후 로그인 연결
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('type');
+            $table->string('position');
             $table->string('thumb');
             $table->string('content');
             $table->dateTime('project_start_date');
