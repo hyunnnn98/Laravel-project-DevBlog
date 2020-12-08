@@ -23,3 +23,27 @@ Route::prefix('/auth')->group(function () {
         Route::get('user', 'AuthController@user');
     });
 });
+
+// award :: route
+Route::prefix('/award')->group(function () {
+    Route::get('/', 'AwardController@index');
+    Route::post('/', 'AwardController@store');
+    Route::patch('/update/{award_id}', 'AwardController@update');
+    Route::delete('{award_id}', 'AwardController@delete');
+});
+
+// project :: route
+Route::prefix('/project')->group(function () {
+    Route::get('/', 'ProjectController@index');
+    Route::post('/', 'ProjectController@store');
+    Route::post('/update/{project_id}', 'ProjectController@update');
+    Route::delete('{project_id}', 'ProjectController@delete');
+});
+
+// skill :: route
+Route::prefix('/skill')->group(function () {
+    Route::get('/', 'SkillController@index');
+    Route::post('/', 'SkillController@store');
+    Route::post('/update/{skill_id}', 'SkillController@update');
+    Route::delete('{skill_id}', 'SkillController@delete');
+});

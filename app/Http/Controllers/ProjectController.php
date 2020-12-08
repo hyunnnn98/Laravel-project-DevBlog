@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -10,6 +11,10 @@ class ProjectController extends Controller
     // 등록된 프로젝트 조회
     public function index() {
         $projects = Project::all();
+
+        foreach($projects as $project) {
+            $project['thumb'] = self::get_img($project['thumb']);
+        }
 
         return self::response_json("프로젝트 조회에 성공하였습니다.", 200, $projects);
     }
@@ -33,7 +38,7 @@ class ProjectController extends Controller
             'title' => 'required|string',
             'type' => 'required|string',
             'position' => 'required|string',
-            'thumb' => 'required|string',
+            'thumb' => 'required|image',
             'content' => 'required|string',
             'project_start_date' => 'required|date',
             'project_end_date' => 'required|date',
@@ -48,11 +53,24 @@ class ProjectController extends Controller
             return $validated_result;
         }
 
-        //TODO 사진 저장 로직넣기
+        $project = Project::create([
+            'title' => $request->input('title'),
+            'type' => $request->input('type'),
+            'position' => $request->input('position'),
+            'thumb' => 0,
+            'content' => $request->input('content'),
+            'project_start_date' => $request->input('project_start_date'),
+            'project_end_date' => $request->input('project_end_date'),
+            'project_link' => $request->input('project_link'),
+        ]);
 
-        $created_project = Project::create($request);
+        $img_title = $project->title;
 
-        return self::response_json("프로젝트 생성에 성공하였습니다.", 201, $created_project);
+        $project->update([
+            'thumb' => self::set_img($request->file('thumb'), $img_title, 'project')
+        ]);
+
+        return self::response_json("프로젝트 등록에 성공하였습니다.", 201, $project);
     }
 
     // 프로젝트 수정
@@ -75,7 +93,14 @@ class ProjectController extends Controller
             return $validated_result;
         }
 
-        $project_id->update($request);
+        // 기존 이미지 삭제
+        Storage::delete($project_id->thumb);
+
+        $img_title = $request->input('title');
+        $requestData = $request->all();
+        $requestData['thumb'] = self::set_img($request->file('thumb'), $img_title, 'project');
+
+        $project_id->update($requestData);
 
         return self::response_json("프로젝트 수정에 성공하였습니다.", 200);
     }
