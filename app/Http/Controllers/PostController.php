@@ -17,6 +17,7 @@ class PostController extends Controller
     // 게시글 생성
     public function store(Request $request) {
         $rules = [
+            'category' => 'required|integer|distinct|min:0|max:999',
             'title' => 'required|string',
             'content' => 'required|string',
         ];
@@ -29,7 +30,7 @@ class PostController extends Controller
             return $validated_result;
         }
 
-        $created_post = Category::create($request->all());
+        $created_post = Post::create($request->all());
 
         return self::response_json("게시글 생성에 성공하였습니다.", 201, $created_post);
     }

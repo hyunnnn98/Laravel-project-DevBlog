@@ -47,3 +47,19 @@ Route::prefix('/skill')->group(function () {
     Route::post('/update/{skill_id}', 'SkillController@update');
     Route::delete('{skill_id}', 'SkillController@delete');
 });
+
+// category :: route
+Route::prefix('/category')->group(function () {
+    Route::get('/', 'CategoryController@index');
+    Route::post('/', 'CategoryController@store');
+    // Route::post('/update/{skill_id}', 'CategoryController@update');
+    // Route::delete('{skill_id}', 'CategoryController@delete');
+});
+
+// post :: route
+Route::prefix('/post')->group(function () {
+    Route::get('/', 'PostController@index');
+    Route::post('/', 'PostController@store');
+    // Route::post('/update/{skill_id}', 'CategoryController@update');
+    // Route::delete('{skill_id}', 'CategoryController@delete');
+});
